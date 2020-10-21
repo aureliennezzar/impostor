@@ -78,8 +78,13 @@ document.addEventListener('DOMContentLoaded', function () {
 		updateModal: function (word, name) {
 			game.modalForm.style.display = "none"
 			game.modalInfos.style.display = "flex"
-			game.modalRole.innerHTML = word
-			game.modalTitle.innerHTML = `${name}, votre mot est : `
+			if (word.length === 0) {
+				game.modalRole.innerHTML = "Tu es Mr.s White"
+				game.modalTitle.innerHTML = `${name}, tu n'as pas de mot secret`
+			} else {
+				game.modalRole.innerHTML = word
+				game.modalTitle.innerHTML = `${name}, votre mot est : `
+			}
 		},
 		closeModal: function () {
 			game.modal.style.display = "none"
