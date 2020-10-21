@@ -1,0 +1,15 @@
+.board{
+	display: flex;
+	width: 100%;
+	justify-content: space-evenly;
+	flex-wrap: wrap;
+	&-card{
+		width: 100px;
+		height: 100px;
+		background: rgb(65, 0, 0);
+		border: 1px solid;
+	}
+	&-card.active{
+		background: red;
+	}
+}
