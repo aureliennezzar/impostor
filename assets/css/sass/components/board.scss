@@ -1,15 +1,52 @@
-.board{
+.board {
 	display: flex;
 	width: 100%;
 	justify-content: space-evenly;
 	flex-wrap: wrap;
-	&-card{
+	&-card {
+		display: flex;
+		flex-direction: column;
 		width: 100px;
-		height: 100px;
-		background: rgb(65, 0, 0);
+		min-height: 150px;
+		background: #410000;
 		border: 1px solid;
 	}
-	&-card.active{
+	&-card.active {
 		background: red;
+	}
+	&-card.player.eliminated {
+		.content {
+			background: black;
+		}
+	}
+	&-card.player.watching {
+		.content {
+			background: blue;
+		}
+	}
+
+	&-card.player {
+		background: none;
+		border: none;
+		text-align: center;
+		align-items: center;
+		color: #fff;
+		.content {
+			display: flex;
+			@extend %centerFlex;
+			background: #410000;
+			border-radius: 50%;
+			height: 100px;
+			width: 100px;
+		}
+		.name {
+			background: rgb(192, 192, 192);
+			width: 100%;
+			display: flex;
+			margin-top: 6px;
+			padding: 5px 10px;
+			border-radius: 99999999px;
+			@extend %centerFlex;
+		}
 	}
 }

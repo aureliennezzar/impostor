@@ -76,6 +76,11 @@ select {
     scroll-behavior: auto !important;
   }
 }
+.board-card.player .name, .board-card.player .content {
+  align-items: center;
+  justify-content: center;
+}
+
 .modal-content, .modal-content-form, .modal-content-infos {
   display: flex;
   flex-direction: column;
@@ -92,13 +97,43 @@ select {
   flex-wrap: wrap;
 }
 .board-card {
+  display: flex;
+  flex-direction: column;
   width: 100px;
-  height: 100px;
+  min-height: 150px;
   background: #410000;
   border: 1px solid;
 }
 .board-card.active {
   background: red;
+}
+.board-card.player.eliminated .content {
+  background: black;
+}
+.board-card.player.watching .content {
+  background: blue;
+}
+.board-card.player {
+  background: none;
+  border: none;
+  text-align: center;
+  align-items: center;
+  color: #fff;
+}
+.board-card.player .content {
+  display: flex;
+  background: #410000;
+  border-radius: 50%;
+  height: 100px;
+  width: 100px;
+}
+.board-card.player .name {
+  background: silver;
+  width: 100%;
+  display: flex;
+  margin-top: 6px;
+  padding: 5px 10px;
+  border-radius: 99999999px;
 }
 
 .modal {
@@ -133,6 +168,10 @@ select {
 }
 .modal-content-form .form-input {
   padding: 5px 10px;
+}
+
+.footer-see {
+  display: none;
 }
 
 
