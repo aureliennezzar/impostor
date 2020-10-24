@@ -130,10 +130,8 @@ document.addEventListener('DOMContentLoaded', function () {
   };
 
   var Player = function Player(name) {
-    var victory = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 0;
-    var alive = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : true;
+    var alive = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : true;
     this.name = name;
-    this.victory = victory;
     this.alive = alive;
   };
 
@@ -143,6 +141,8 @@ document.addEventListener('DOMContentLoaded', function () {
   };
 
   var game = {
+    // ---------INITIALISATION---------
+    //Elements init
     board: document.querySelector('.board'),
     modal: document.querySelector('.modal'),
     modalForm: document.querySelector('.modal-content-form'),
@@ -154,15 +154,17 @@ document.addEventListener('DOMContentLoaded', function () {
     formInput: document.querySelector('.form-input'),
     seeBtn: document.querySelector('.footer-see'),
     resetBtn: document.querySelector('.footer-reset'),
+    //Variables init
+    playerChosing: false,
     inGame: false,
     newPlayers: true,
     seeCard: false,
     overlayActive: true,
-    nbPlayers: 4,
+    nbPlayers: 3,
     nbImpostor: 1,
     nbWhite: 0,
     nbInfiltrators: 1 + 0,
-    nbCitizens: 4 - (1 + 0),
+    nbCitizens: 3 - (1 + 0),
     activePlayer: 0,
     playerList: [],
     cardList: [],
@@ -170,14 +172,14 @@ document.addEventListener('DOMContentLoaded', function () {
       game.getWords();
       game.generateCards();
       game.fillBoard();
-      game.chooseCard();
+      game.initCardsListeners();
       game.handleBtns();
     },
-    //MODALS HANDLE
+    // ---------MODALS HANDLE---------
     handleModal: function handleModal(e) {
       e.preventDefault();
 
-      if (e.target === game.modal && game.overlayActive) {
+      if (e.target === game.modal && game.overlayActive & !game.playerChosing) {
         //PLAYER CLICK OVERLAY
         game.activePlayer--;
         game.formInput.value = "";
@@ -185,40 +187,35 @@ document.addEventListener('DOMContentLoaded', function () {
         window.removeEventListener('click', game.handleModal);
       } else if (e.target === game.formBtn) {
         //PLAYER CHOSE CARD
-        var key = game.cardClicked.getAttribute("data-key");
-        var _card = game.cardList[key];
-        var playerName = game.formInput.value;
-
-        if (playerName.trim() != "") {
-          game.cardClicked.classList.remove('active');
-          game.cardClicked.classList.add('player');
-          game.cardClicked.innerHTML += "<div class=\"content\"> <p>".concat(playerName[0], "</p></div>");
-          game.cardClicked.innerHTML += "<p class=\"name\">".concat(playerName, "</p>");
-          _card.player = new Player(playerName);
-          game.playerList.push(_card.player.name);
-          game.updateModal(_card.word, playerName, false);
-          game.formInput.value = "";
-          game.overlayActive = false;
-        }
+        game.attribCard();
       } else if (e.target === game.modalBtn && !game.inGame) {
         //PLAYER CLICK CONTINUE
         game.closeModal();
 
         if (game.activePlayer >= game.nbPlayers) {
           game.startRound();
+        } else if (!game.newPlayers && !game.playerChosing) {
+          game.playerModal();
         }
       } else if (e.target === game.modalBtn) {
         game.closeModal();
       }
     },
     updateModal: function updateModal(main, title) {
+      //Reset modal elements
       game.modalInfos.style.display = "flex";
       game.modalForm.style.display = "none";
 
       if (game.inGame) {
+        //If all players already chose a card, display directly main & title
+        game.modalTitle.innerHTML = title;
+        game.modalRole.innerHTML = main;
+      } else if (!game.newPlayers && !game.playerChosing) {
+        //Else if its a new game with same players and nobdy is chosing a card, display directly main & title
         game.modalTitle.innerHTML = title;
         game.modalRole.innerHTML = main;
       } else {
+        //Else update modal to show the role/word
         if (main.length === 0) {
           game.modalRole.innerHTML = "Tu es Mr.s White";
           game.modalTitle.innerHTML = "".concat(title, ", tu n'as pas de mot secret");
@@ -229,23 +226,70 @@ document.addEventListener('DOMContentLoaded', function () {
       }
     },
     closeModal: function closeModal() {
+      //Reset then close modal (display none)
       game.modalForm.style.display = "flex";
       game.modalInfos.style.display = "none";
       game.overlayActive = true;
       game.modal.style.display = "none";
     },
     showModal: function showModal() {
-      !game.inGame && (game.modalTitle.innerHTML = "Joueur ".concat(game.activePlayer + 1));
+      //Show modal (display flex)
+      if (!game.inGame && game.newPlayers) {
+        //If not all players chose there cards and its a new game, display the n°Player that have to choose card
+        game.modalTitle.innerHTML = "Joueur ".concat(game.activePlayer + 1);
+      }
+
       game.modal.style.display = 'flex';
       window.addEventListener('click', game.handleModal);
     },
-    // CARDS HANDLE
+    playerModal: function playerModal() {
+      //Show who need to choose a card (in case of new game with same players)
+      game.updateModal("Choisis une carte", game.playerList[game.activePlayer]);
+      game.playerChosing = true;
+      game.showModal();
+    },
+    // ---------CARDS HANDLE---------
+    attribCard: function attribCard() {
+      //Attribute a player to a card
+      var key = game.cardClicked.getAttribute("data-key");
+      var card = game.cardList[key];
+      var playerName = ""; //If new players set playername to the formInput value, otherwise its the next player in the list
+
+      game.newPlayers ? playerName += game.formInput.value : playerName += game.playerList[game.activePlayer];
+
+      if (playerName.trim() != "") {
+        //Player attribution
+        game.cardClicked.classList.remove('active');
+        game.cardClicked.classList.add('player');
+        game.cardClicked.innerHTML += "<div class=\"content\"> <p>".concat(playerName[0], "</p></div>");
+        game.cardClicked.innerHTML += "<p class=\"name\">".concat(playerName, "</p>");
+        card.player = new Player(playerName);
+        game.updateModal(card.word, playerName, false);
+        game.overlayActive = false; //If new players push playername to playerlist, else existing player is no longer chosing a card
+
+        if (game.newPlayers) {
+          game.playerList.push(card.player.name);
+          game.formInput.value = "";
+        } else {
+          game.playerChosing = false;
+          game.showModal();
+        }
+      }
+    },
     cardClick: function cardClick() {
+      //When a player click on a card
       var cardClasses = this.classList.value;
 
       if (cardClasses.indexOf('active') >= 0) {
+        //If card is not already chosed
         game.cardClicked = this;
-        game.showModal();
+
+        if (!game.newPlayers) {
+          game.attribCard();
+        } else {
+          game.showModal();
+        }
+
         game.activePlayer++;
       } else if (game.seeCard && cardClasses.indexOf('eliminated') < 0) {
         game.displayWord(this.getAttribute("data-word"));
@@ -254,10 +298,11 @@ document.addEventListener('DOMContentLoaded', function () {
       }
     },
     displayWord: function displayWord(word) {
+      //Display a word in alert popin
       alert("Votre mot est : ".concat(word));
       game.updateSeeMode();
     },
-    chooseCard: function chooseCard() {
+    initCardsListeners: function initCardsListeners() {
       var cards = document.querySelectorAll('.board-card');
       var _iteratorNormalCompletion = true;
       var _didIteratorError = false;
@@ -316,7 +361,7 @@ document.addEventListener('DOMContentLoaded', function () {
         cardList[_i].element = "<div class=\"board-card active\" data-role=\"".concat(role, "\" data-word=\"").concat(word, "\" data-key=\"").concat(_i, "\"></div>");
       }
     },
-    //GAME HANDLE
+    // ---------GAME HANDLE---------
     startRound: function startRound() {
       game.inGame = true;
       game.seeBtn.style.display = "block";
@@ -334,15 +379,19 @@ document.addEventListener('DOMContentLoaded', function () {
       game.board.innerHTML = "";
       game.generateCards();
       game.fillBoard();
-      game.chooseCard();
-      game.inGame = false;
+      game.initCardsListeners();
+      game.activePlayer = 0;
 
       if (game.inGame) {
-        game.inGame = false;
         game.newPlayers = false;
+        game.playerModal();
+      } else if (!game.newPlayers) {
+        game.playerModal();
       } else {
         game.playerList = [];
       }
+
+      game.inGame = false;
     },
     kickPlayer: function kickPlayer(el) {
       var cardIndex = parseInt(el.getAttribute("data-key"));
@@ -409,7 +458,7 @@ document.addEventListener('DOMContentLoaded', function () {
         }
       }
     },
-    //OTHER STUFF
+    // ---------OTHER STUFF---------
     removeListeners: function removeListeners() {
       var cards = document.querySelectorAll('.board-card');
       var _iteratorNormalCompletion3 = true;
@@ -528,7 +577,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "61770" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "64486" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};

@@ -3,11 +3,13 @@
 	width: 100%;
 	justify-content: space-evenly;
 	flex-wrap: wrap;
+	padding: 0 20px;
+	height: 100%;
 	&-card {
 		display: flex;
 		flex-direction: column;
 		width: 100px;
-		min-height: 150px;
+		max-height: 150px;
 		background: #410000;
 		border: 1px solid;
 	}
@@ -40,7 +42,7 @@
 			width: 100px;
 		}
 		.name {
-			background: rgb(192, 192, 192);
+			background: #c0c0c094;
 			width: 100%;
 			display: flex;
 			margin-top: 6px;
