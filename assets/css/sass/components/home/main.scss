@@ -1,0 +1,67 @@
+.home-main {
+	display: flex;
+	flex-direction: column;
+	padding: 0 20px;
+	align-items: center;
+	justify-content: center;
+	height: 100%;
+	.slider-wrapper {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		width: 80%;
+		margin-bottom: 30px;
+		.slider-label{
+			margin-bottom: 20px;
+			font-size:20px;
+		}
+		.playerSlider {
+			-webkit-appearance: none; /* Override default CSS styles */
+			appearance: none;
+			width: 100%; /* Full-width */
+			height: 3px; /* Specified height */
+			background: #000000; /* Grey background */
+			outline: none; /* Remove outline */
+			&::-webkit-slider-thumb {
+				-webkit-appearance: none; /* Override default look */
+				appearance: none;
+				width: 25px; /* Set a specific slider handle width */
+				height: 25px; /* Slider handle height */
+				border-radius: 50%;
+				background: #2541b2; /* Green background */
+				cursor: pointer; /* Cursor on hover */
+			}
+		}
+	}
+	.game-infos {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		background: rgba(255, 255, 255, 0.623);
+		padding: 0 20px;
+		border-radius: 7px;
+		height: 150px;
+		justify-content: space-evenly;
+		&-text {
+			padding: 0 10px;
+			margin: 0 10px;
+			border-radius: 99999999px;
+		}
+		&-civil {
+			color: #fff;
+			background: blue;
+		}
+
+		&-item {
+			display: flex;
+			.white {
+				color: black;
+				background: white;
+			}
+			.black {
+				background: black;
+				color: #fff;
+			}
+		}
+	}
+}

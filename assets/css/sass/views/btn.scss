@@ -1,3 +1,11 @@
 .btn{
 	text-transform: uppercase;
+	&-infos{
+		border-radius: 50%;
+		height: 25px;
+		width: 25px;
+		border: none;
+		background: black;
+		color: #fff;
+	}
 }

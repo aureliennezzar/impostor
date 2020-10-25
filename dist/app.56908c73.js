@@ -120,14 +120,59 @@ parcelRequire = (function (modules, cache, entry, globalName) {
 })({"assets/js/app.js":[function(require,module,exports) {
 document.addEventListener('DOMContentLoaded', function () {
   var app = {
-    amountPlayers: function amountPlayers(player) {
-      return game.nbPlayers = player;
+    slider: document.querySelector('.playerSlider'),
+    sliderLabel: document.querySelector('.slider-label'),
+    civiliansDisplay: document.querySelector('.game-infos-civil'),
+    impostorDisplay: document.querySelector('.game-infos-impostor .game-infos-text'),
+    mrWhiteDisplay: document.querySelector('.game-infos-mrwhite .game-infos-text'),
+    nbPlayers: 5,
+    nbImpostor: 1,
+    nbWhite: 1,
+    nbInfiltrators: 2,
+    nbCivilians: 3,
+    updateInfos: function updateInfos() {
+      app.sliderLabel.innerHTML = 'Joueurs : ' + app.nbPlayers;
+      app.civiliansDisplay.innerHTML = app.nbCivilians + ' Civils';
+      app.impostorDisplay.innerHTML = app.nbImpostor + ' Imposteurs';
+      app.mrWhiteDisplay.innerHTML = app.nbWhite + ' Mr.White';
+    },
+    handleSlider: function handleSlider() {
+      app.updateInfos();
+      app.slider.addEventListener('input', function () {
+        app.nbPlayers = this.value;
+        app.nbImpostor = 0;
+        app.nbWhite = 0;
+        var maxImpostors = 0;
+        var maxInfiltrators = Math.floor(app.nbPlayers / 2);
+        this.value % 2 === 0 ? maxImpostors += maxInfiltrators - 1 : maxImpostors += maxInfiltrators;
+        var increaseInterval = 2;
+        var wCount = 0;
+        iCount = 0;
+
+        for (var i = 4; i <= 20; i += 2) {
+          !increaseInterval ? wCount++ : iCount++;
+
+          if (app.nbPlayers >= i - 1 && app.nbPlayers <= i) {
+            app.nbWhite = wCount;
+            app.nbImpostor = iCount;
+            console.log(wCount);
+            app.nbInfiltrators = iCount + wCount;
+            app.nbCivilians = app.nbPlayers - app.nbInfiltrators;
+          }
+
+          ;
+          increaseInterval++;
+          if (increaseInterval > 2) increaseInterval = 0;
+        }
+
+        app.updateInfos();
+      });
     },
     init: function init() {
-      app.helloworld;
-    },
-    helloworld: console.log("Impostor is running!")
+      app.handleSlider();
+    }
   };
+  app.init();
 
   var Player = function Player(name) {
     var alive = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : true;
@@ -545,9 +590,7 @@ document.addEventListener('DOMContentLoaded', function () {
         if (confirm('Changer de mots ?\nLe tour en cours sera réinitialisé')) game.restartGame();
       });
     }
-  };
-  app.init();
-  game.init();
+  }; // game.init()
 });
 },{}],"../../../../../AppData/Roaming/npm/node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
@@ -577,7 +620,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "64486" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "62954" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};

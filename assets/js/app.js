@@ -1,14 +1,56 @@
 document.addEventListener('DOMContentLoaded', function () {
 	var app = {
-		amountPlayers: function (player) {
-			return game.nbPlayers = player
+		slider: document.querySelector('.playerSlider'),
+		sliderLabel: document.querySelector('.slider-label'),
+		civiliansDisplay: document.querySelector('.game-infos-civil'),
+		impostorDisplay: document.querySelector('.game-infos-impostor .game-infos-text'),
+		mrWhiteDisplay: document.querySelector('.game-infos-mrwhite .game-infos-text'),
+		nbPlayers: 5,
+		nbImpostor: 1,
+		nbWhite: 1,
+		nbInfiltrators: 2,
+		nbCivilians: 3,
+		updateInfos:function(){
+			app.sliderLabel.innerHTML = 'Joueurs : ' + app.nbPlayers
+			app.civiliansDisplay.innerHTML = app.nbCivilians + ' Civils'
+			app.impostorDisplay.innerHTML = app.nbImpostor + ' Imposteurs'
+			app.mrWhiteDisplay.innerHTML = app.nbWhite + ' Mr.White'
 		},
+		handleSlider: function () {
+			app.updateInfos()
+			app.slider.addEventListener('input', function () {
+				app.nbPlayers = this.value
+				app.nbImpostor = 0
+				app.nbWhite = 0
+				let maxImpostors = 0
+				let maxInfiltrators = Math.floor(app.nbPlayers / 2)
+				this.value % 2 === 0
+					? maxImpostors += maxInfiltrators - 1
+					: maxImpostors += maxInfiltrators
+				let increaseInterval = 2
 
-		init: function () {
-			app.helloworld;
+				let wCount = 0;
+					iCount = 0;
+				for (let i = 4; i <= 20; i += 2) {
+					!increaseInterval ? wCount++ : iCount++
+					if (app.nbPlayers >= i - 1 && app.nbPlayers <= i) {
+						app.nbWhite = wCount;
+						app.nbImpostor = iCount;
+						console.log(wCount);
+						app.nbInfiltrators = iCount + wCount
+						app.nbCivilians = app.nbPlayers - app.nbInfiltrators
+					};
+					increaseInterval++
+					if (increaseInterval > 2) increaseInterval = 0
+				}
+				app.updateInfos()
+			})
 		},
-		helloworld: console.log("Impostor is running!")
+		init: function () {
+			app.handleSlider();
+		},
 	}
+	app.init()
 
 
 	const Player = function (name, alive = true) {
@@ -91,7 +133,7 @@ document.addEventListener('DOMContentLoaded', function () {
 			//Reset modal elements
 			game.modalInfos.style.display = "flex"
 			game.modalForm.style.display = "none"
-			
+
 			if (game.inGame) {
 				//If all players already chose a card, display directly main & title
 				game.modalTitle.innerHTML = title;
@@ -157,7 +199,7 @@ document.addEventListener('DOMContentLoaded', function () {
 				card.player = new Player(playerName)
 				game.updateModal(card.word, playerName, false);
 				game.overlayActive = false
-				
+
 				//If new players push playername to playerlist, else existing player is no longer chosing a card
 				if (game.newPlayers) {
 					game.playerList.push(card.player.name)
@@ -327,6 +369,5 @@ document.addEventListener('DOMContentLoaded', function () {
 			})
 		},
 	}
-	app.init()
-	game.init()
+	// game.init()
 })

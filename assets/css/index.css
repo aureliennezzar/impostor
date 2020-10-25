@@ -89,6 +89,14 @@ select {
 .btn {
   text-transform: uppercase;
 }
+.btn-infos {
+  border-radius: 50%;
+  height: 25px;
+  width: 25px;
+  border: none;
+  background: black;
+  color: #fff;
+}
 
 .board {
   display: flex;
@@ -185,6 +193,94 @@ select {
 .header {
   width: 100%;
   display: flex;
+  padding: 10px;
+}
+
+.home-header {
+  text-align: center;
+  padding: 10px 0;
+}
+
+.home-main {
+  display: flex;
+  flex-direction: column;
+  padding: 0 20px;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+}
+.home-main .slider-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 80%;
+  margin-bottom: 30px;
+}
+.home-main .slider-wrapper .slider-label {
+  margin-bottom: 20px;
+  font-size: 20px;
+}
+.home-main .slider-wrapper .playerSlider {
+  -webkit-appearance: none;
+  /* Override default CSS styles */
+  appearance: none;
+  width: 100%;
+  /* Full-width */
+  height: 3px;
+  /* Specified height */
+  background: #000000;
+  /* Grey background */
+  outline: none;
+  /* Remove outline */
+}
+.home-main .slider-wrapper .playerSlider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  /* Override default look */
+  appearance: none;
+  width: 25px;
+  /* Set a specific slider handle width */
+  height: 25px;
+  /* Slider handle height */
+  border-radius: 50%;
+  background: #2541b2;
+  /* Green background */
+  cursor: pointer;
+  /* Cursor on hover */
+}
+.home-main .game-infos {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background: rgba(255, 255, 255, 0.623);
+  padding: 0 20px;
+  border-radius: 7px;
+  height: 150px;
+  justify-content: space-evenly;
+}
+.home-main .game-infos-text {
+  padding: 0 10px;
+  margin: 0 10px;
+  border-radius: 99999999px;
+}
+.home-main .game-infos-civil {
+  color: #fff;
+  background: blue;
+}
+.home-main .game-infos-item {
+  display: flex;
+}
+.home-main .game-infos-item .white {
+  color: black;
+  background: white;
+}
+.home-main .game-infos-item .black {
+  background: black;
+  color: #fff;
+}
+
+.home-footer {
+  display: flex;
+  justify-content: center;
   padding: 10px;
 }
 
