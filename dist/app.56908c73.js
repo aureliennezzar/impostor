@@ -120,21 +120,159 @@ parcelRequire = (function (modules, cache, entry, globalName) {
 })({"assets/js/app.js":[function(require,module,exports) {
 document.addEventListener('DOMContentLoaded', function () {
   var app = {
+    boardWrapper: document.querySelector('.board-wrapper'),
     slider: document.querySelector('.playerSlider'),
     sliderLabel: document.querySelector('.slider-label'),
     civiliansDisplay: document.querySelector('.game-infos-civil'),
     impostorDisplay: document.querySelector('.game-infos-impostor .game-infos-text'),
     mrWhiteDisplay: document.querySelector('.game-infos-mrwhite .game-infos-text'),
+    //Minus Add btns
+    addImpostor: document.querySelector('.game-infos-impostor .add'),
+    minusImpostor: document.querySelector('.game-infos-impostor .minus'),
+    addWhite: document.querySelector('.game-infos-mrwhite .add'),
+    minusWhite: document.querySelector('.game-infos-mrwhite .minus'),
+    buttons: document.querySelectorAll('.game-infos-item button'),
+    addButtons: document.querySelectorAll('.game-infos-item button.add'),
+    minusButtons: document.querySelectorAll('.game-infos-item button.minus'),
+    startBtn: document.querySelector('.btn-start'),
     nbPlayers: 5,
     nbImpostor: 1,
     nbWhite: 1,
     nbInfiltrators: 2,
-    nbCivilians: 3,
+    nbCitizens: 3,
+    maxImpostors: 2,
+    maxInfiltrators: 2,
+    init: function init() {
+      console.log("%c\n    _   _            _____                          _                \n   | | | |          |_   _|                        | |               \n   | |_| |__   ___    | | _ __ ___  _ __   ___  ___| |_ ___  _ __    \n   | __| '_ \\ / _ \\   | || '_ ` _ \\| '_ \\ / _ \\/ __| __/ _ \\| '__|   \n   | |_| | | |  __/  _| || | | | | | |_) | (_) \\__ \\ || (_) | |      \n    \\__|_| |_|\\___|  \\___/_| |_| |_| .__/ \\___/|___/\\__\\___/|_|      \n   \t\t\t\t\t\t\t\t   | |                               \n\t\t\t\t\t\t\t\t   |_|                               \n\t\t\t\t\t\t\t\t\t                                 ", "background:#1D7D8F;color:#fff;");
+      console.log("%cCreated by Aurélien Tallet & Aurélien NEZZAR.", "color:red;");
+      app.handleSlider();
+      app.handleBtns();
+    },
+    startGame: function startGame() {
+      document.body.classList.add('startgame');
+      game.nbPlayers = app.nbPlayers;
+      game.nbImpostor = app.nbImpostor;
+      game.nbWhite = app.nbWhite;
+      game.nbInfiltrators = app.nbInfiltrators;
+      game.nbCitizens = app.nbCitizens;
+      game.init();
+    },
+    handleBtns: function handleBtns() {
+      //Start btn
+      app.startBtn.addEventListener('click', app.startGame); //ADD
+
+      app.addImpostor.addEventListener('click', function () {
+        app.addRole(0);
+      });
+      app.addWhite.addEventListener('click', function () {
+        app.addRole(1);
+      }); //MINUS
+
+      app.minusImpostor.addEventListener('click', function () {
+        app.minusRole(0);
+      });
+      app.minusWhite.addEventListener('click', function () {
+        app.minusRole(1);
+      });
+    },
+    addRole: function addRole(type) {
+      type ? app.nbWhite++ : app.nbImpostor++;
+      app.nbInfiltrators++;
+      app.nbCitizens--;
+      app.updateInfos();
+    },
+    minusRole: function minusRole(type) {
+      type ? app.nbWhite-- : app.nbImpostor--;
+      app.nbInfiltrators--;
+      app.nbCitizens++;
+      app.updateInfos();
+    },
     updateInfos: function updateInfos() {
       app.sliderLabel.innerHTML = 'Joueurs : ' + app.nbPlayers;
-      app.civiliansDisplay.innerHTML = app.nbCivilians + ' Civils';
+      app.civiliansDisplay.innerHTML = app.nbCitizens + ' Civils';
       app.impostorDisplay.innerHTML = app.nbImpostor + ' Imposteurs';
-      app.mrWhiteDisplay.innerHTML = app.nbWhite + ' Mr.White';
+      app.mrWhiteDisplay.innerHTML = app.nbWhite + ' Mr.White'; //RESET BTNS
+
+      var _iteratorNormalCompletion = true;
+      var _didIteratorError = false;
+      var _iteratorError = undefined;
+
+      try {
+        for (var _iterator = app.buttons[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+          btn = _step.value;
+          btn.style.display = "block";
+        } //CONDITIONS
+
+      } catch (err) {
+        _didIteratorError = true;
+        _iteratorError = err;
+      } finally {
+        try {
+          if (!_iteratorNormalCompletion && _iterator.return != null) {
+            _iterator.return();
+          }
+        } finally {
+          if (_didIteratorError) {
+            throw _iteratorError;
+          }
+        }
+      }
+
+      if (app.nbInfiltrators === app.maxInfiltrators) {
+        var _iteratorNormalCompletion2 = true;
+        var _didIteratorError2 = false;
+        var _iteratorError2 = undefined;
+
+        try {
+          for (var _iterator2 = app.addButtons[Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
+            btn = _step2.value;
+            btn.style.display = "none";
+          }
+        } catch (err) {
+          _didIteratorError2 = true;
+          _iteratorError2 = err;
+        } finally {
+          try {
+            if (!_iteratorNormalCompletion2 && _iterator2.return != null) {
+              _iterator2.return();
+            }
+          } finally {
+            if (_didIteratorError2) {
+              throw _iteratorError2;
+            }
+          }
+        }
+      }
+
+      if (app.nbInfiltrators === 1) {
+        var _iteratorNormalCompletion3 = true;
+        var _didIteratorError3 = false;
+        var _iteratorError3 = undefined;
+
+        try {
+          for (var _iterator3 = app.minusButtons[Symbol.iterator](), _step3; !(_iteratorNormalCompletion3 = (_step3 = _iterator3.next()).done); _iteratorNormalCompletion3 = true) {
+            btn = _step3.value;
+            btn.style.display = "none";
+          }
+        } catch (err) {
+          _didIteratorError3 = true;
+          _iteratorError3 = err;
+        } finally {
+          try {
+            if (!_iteratorNormalCompletion3 && _iterator3.return != null) {
+              _iterator3.return();
+            }
+          } finally {
+            if (_didIteratorError3) {
+              throw _iteratorError3;
+            }
+          }
+        }
+      }
+
+      if (app.nbImpostor === app.maxImpostors) app.addImpostor.style.display = "none";
+      if (!app.nbImpostor) app.minusImpostor.style.display = "none";
+      if (!app.nbWhite) app.minusWhite.style.display = "none";
     },
     handleSlider: function handleSlider() {
       app.updateInfos();
@@ -142,9 +280,9 @@ document.addEventListener('DOMContentLoaded', function () {
         app.nbPlayers = this.value;
         app.nbImpostor = 0;
         app.nbWhite = 0;
-        var maxImpostors = 0;
-        var maxInfiltrators = Math.floor(app.nbPlayers / 2);
-        this.value % 2 === 0 ? maxImpostors += maxInfiltrators - 1 : maxImpostors += maxInfiltrators;
+        app.maxImpostors = 0;
+        app.maxInfiltrators = Math.floor(app.nbPlayers / 2);
+        this.value % 2 === 0 ? app.maxImpostors += app.maxInfiltrators - 1 : app.maxImpostors += app.maxInfiltrators;
         var increaseInterval = 2;
         var wCount = 0;
         iCount = 0;
@@ -155,9 +293,8 @@ document.addEventListener('DOMContentLoaded', function () {
           if (app.nbPlayers >= i - 1 && app.nbPlayers <= i) {
             app.nbWhite = wCount;
             app.nbImpostor = iCount;
-            console.log(wCount);
             app.nbInfiltrators = iCount + wCount;
-            app.nbCivilians = app.nbPlayers - app.nbInfiltrators;
+            app.nbCitizens = app.nbPlayers - app.nbInfiltrators;
           }
 
           ;
@@ -167,9 +304,6 @@ document.addEventListener('DOMContentLoaded', function () {
 
         app.updateInfos();
       });
-    },
-    init: function init() {
-      app.handleSlider();
     }
   };
   app.init();
@@ -189,6 +323,7 @@ document.addEventListener('DOMContentLoaded', function () {
     // ---------INITIALISATION---------
     //Elements init
     board: document.querySelector('.board'),
+    boardWrapper: document.querySelector('.board-wrapper'),
     modal: document.querySelector('.modal'),
     modalForm: document.querySelector('.modal-content-form'),
     modalInfos: document.querySelector('.modal-content-infos'),
@@ -199,18 +334,19 @@ document.addEventListener('DOMContentLoaded', function () {
     formInput: document.querySelector('.form-input'),
     seeBtn: document.querySelector('.footer-see'),
     resetBtn: document.querySelector('.footer-reset'),
+    leaveBtn: document.querySelector('.header-leave'),
     //Variables init
     playerChosing: false,
     inGame: false,
     newPlayers: true,
     seeCard: false,
     overlayActive: true,
-    nbPlayers: 3,
-    nbImpostor: 1,
-    nbWhite: 0,
-    nbInfiltrators: 1 + 0,
-    nbCitizens: 3 - (1 + 0),
     activePlayer: 0,
+    nbPlayers: app.nbPlayers,
+    nbImpostor: app.nbImpostor,
+    nbWhite: app.nbWhite,
+    nbInfiltrators: app.nbInfiltrators,
+    nbCitizens: app.nbCitizens,
     playerList: [],
     cardList: [],
     init: function init() {
@@ -224,7 +360,7 @@ document.addEventListener('DOMContentLoaded', function () {
     handleModal: function handleModal(e) {
       e.preventDefault();
 
-      if (e.target === game.modal && game.overlayActive & !game.playerChosing) {
+      if (e.target === game.modal && game.overlayActive && !game.playerChosing) {
         //PLAYER CLICK OVERLAY
         game.activePlayer--;
         game.formInput.value = "";
@@ -251,12 +387,8 @@ document.addEventListener('DOMContentLoaded', function () {
       game.modalInfos.style.display = "flex";
       game.modalForm.style.display = "none";
 
-      if (game.inGame) {
+      if (game.inGame || !game.newPlayers && !game.playerChosing) {
         //If all players already chose a card, display directly main & title
-        game.modalTitle.innerHTML = title;
-        game.modalRole.innerHTML = main;
-      } else if (!game.newPlayers && !game.playerChosing) {
-        //Else if its a new game with same players and nobdy is chosing a card, display directly main & title
         game.modalTitle.innerHTML = title;
         game.modalRole.innerHTML = main;
       } else {
@@ -349,26 +481,26 @@ document.addEventListener('DOMContentLoaded', function () {
     },
     initCardsListeners: function initCardsListeners() {
       var cards = document.querySelectorAll('.board-card');
-      var _iteratorNormalCompletion = true;
-      var _didIteratorError = false;
-      var _iteratorError = undefined;
+      var _iteratorNormalCompletion4 = true;
+      var _didIteratorError4 = false;
+      var _iteratorError4 = undefined;
 
       try {
-        for (var _iterator = cards[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
-          card = _step.value;
+        for (var _iterator4 = cards[Symbol.iterator](), _step4; !(_iteratorNormalCompletion4 = (_step4 = _iterator4.next()).done); _iteratorNormalCompletion4 = true) {
+          card = _step4.value;
           card.addEventListener('click', game.cardClick);
         }
       } catch (err) {
-        _didIteratorError = true;
-        _iteratorError = err;
+        _didIteratorError4 = true;
+        _iteratorError4 = err;
       } finally {
         try {
-          if (!_iteratorNormalCompletion && _iterator.return != null) {
-            _iterator.return();
+          if (!_iteratorNormalCompletion4 && _iterator4.return != null) {
+            _iterator4.return();
           }
         } finally {
-          if (_didIteratorError) {
-            throw _iteratorError;
+          if (_didIteratorError4) {
+            throw _iteratorError4;
           }
         }
       }
@@ -419,7 +551,23 @@ document.addEventListener('DOMContentLoaded', function () {
       game.updateModal("".concat(firstCard.player.name, ",commence"), "Décrivez votre mot");
       game.showModal();
     },
+    leaveGame: function leaveGame() {
+      if (confirm('Quitter la partie ?')) {
+        game.playerList = [];
+        game.cardList = [];
+        game.newPlayers = true;
+        game.playerChosing = false;
+        game.inGame = false;
+        game.newPlayers = true;
+        game.seeCard = false;
+        game.overlayActive = true;
+        game.activePlayer = 0;
+        game.board.innerHTML = "";
+        document.body.classList.remove('startgame');
+      }
+    },
     restartGame: function restartGame() {
+      game.seeBtn.style.display = "none";
       game.cardList = [];
       game.board.innerHTML = "";
       game.generateCards();
@@ -437,6 +585,10 @@ document.addEventListener('DOMContentLoaded', function () {
       }
 
       game.inGame = false;
+    },
+    restartbtn: function restartbtn() {
+      var force = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 0;
+      if (confirm('Changer de mots ?\nLe tour en cours sera réinitialisé')) game.restartGame();
     },
     kickPlayer: function kickPlayer(el) {
       var cardIndex = parseInt(el.getAttribute("data-key"));
@@ -479,26 +631,26 @@ document.addEventListener('DOMContentLoaded', function () {
       };
     },
     fillBoard: function fillBoard() {
-      var _iteratorNormalCompletion2 = true;
-      var _didIteratorError2 = false;
-      var _iteratorError2 = undefined;
+      var _iteratorNormalCompletion5 = true;
+      var _didIteratorError5 = false;
+      var _iteratorError5 = undefined;
 
       try {
-        for (var _iterator2 = game.cardList[Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
-          card = _step2.value;
+        for (var _iterator5 = game.cardList[Symbol.iterator](), _step5; !(_iteratorNormalCompletion5 = (_step5 = _iterator5.next()).done); _iteratorNormalCompletion5 = true) {
+          card = _step5.value;
           game.board.innerHTML += card.element;
         }
       } catch (err) {
-        _didIteratorError2 = true;
-        _iteratorError2 = err;
+        _didIteratorError5 = true;
+        _iteratorError5 = err;
       } finally {
         try {
-          if (!_iteratorNormalCompletion2 && _iterator2.return != null) {
-            _iterator2.return();
+          if (!_iteratorNormalCompletion5 && _iterator5.return != null) {
+            _iterator5.return();
           }
         } finally {
-          if (_didIteratorError2) {
-            throw _iteratorError2;
+          if (_didIteratorError5) {
+            throw _iteratorError5;
           }
         }
       }
@@ -506,91 +658,48 @@ document.addEventListener('DOMContentLoaded', function () {
     // ---------OTHER STUFF---------
     removeListeners: function removeListeners() {
       var cards = document.querySelectorAll('.board-card');
-      var _iteratorNormalCompletion3 = true;
-      var _didIteratorError3 = false;
-      var _iteratorError3 = undefined;
+      var _iteratorNormalCompletion6 = true;
+      var _didIteratorError6 = false;
+      var _iteratorError6 = undefined;
 
       try {
-        for (var _iterator3 = cards[Symbol.iterator](), _step3; !(_iteratorNormalCompletion3 = (_step3 = _iterator3.next()).done); _iteratorNormalCompletion3 = true) {
-          card = _step3.value;
+        for (var _iterator6 = cards[Symbol.iterator](), _step6; !(_iteratorNormalCompletion6 = (_step6 = _iterator6.next()).done); _iteratorNormalCompletion6 = true) {
+          card = _step6.value;
           card.removeEventListener('click', game.cardClick);
         }
       } catch (err) {
-        _didIteratorError3 = true;
-        _iteratorError3 = err;
+        _didIteratorError6 = true;
+        _iteratorError6 = err;
       } finally {
         try {
-          if (!_iteratorNormalCompletion3 && _iterator3.return != null) {
-            _iterator3.return();
+          if (!_iteratorNormalCompletion6 && _iterator6.return != null) {
+            _iterator6.return();
           }
         } finally {
-          if (_didIteratorError3) {
-            throw _iteratorError3;
+          if (_didIteratorError6) {
+            throw _iteratorError6;
           }
         }
       }
+
+      game.leaveBtn.removeEventListener("click", game.leaveGame);
+      game.resetBtn.removeEventListener("click", game.restartbtn);
     },
     updateSeeMode: function updateSeeMode() {
-      var activeCards = document.querySelectorAll('.board-card:not(.eliminated)');
       game.seeCard = !game.seeCard;
 
       if (game.seeCard) {
-        var _iteratorNormalCompletion4 = true;
-        var _didIteratorError4 = false;
-        var _iteratorError4 = undefined;
-
-        try {
-          for (var _iterator4 = activeCards[Symbol.iterator](), _step4; !(_iteratorNormalCompletion4 = (_step4 = _iterator4.next()).done); _iteratorNormalCompletion4 = true) {
-            card = _step4.value;
-            card.classList.add('watching');
-          }
-        } catch (err) {
-          _didIteratorError4 = true;
-          _iteratorError4 = err;
-        } finally {
-          try {
-            if (!_iteratorNormalCompletion4 && _iterator4.return != null) {
-              _iterator4.return();
-            }
-          } finally {
-            if (_didIteratorError4) {
-              throw _iteratorError4;
-            }
-          }
-        }
+        game.boardWrapper.classList.add('watching');
       } else {
-        var _iteratorNormalCompletion5 = true;
-        var _didIteratorError5 = false;
-        var _iteratorError5 = undefined;
-
-        try {
-          for (var _iterator5 = activeCards[Symbol.iterator](), _step5; !(_iteratorNormalCompletion5 = (_step5 = _iterator5.next()).done); _iteratorNormalCompletion5 = true) {
-            card = _step5.value;
-            card.classList.remove('watching');
-          }
-        } catch (err) {
-          _didIteratorError5 = true;
-          _iteratorError5 = err;
-        } finally {
-          try {
-            if (!_iteratorNormalCompletion5 && _iterator5.return != null) {
-              _iterator5.return();
-            }
-          } finally {
-            if (_didIteratorError5) {
-              throw _iteratorError5;
-            }
-          }
-        }
+        game.boardWrapper.classList.remove('watching');
       }
     },
     handleBtns: function handleBtns() {
+      game.leaveBtn.addEventListener("click", game.leaveGame);
       game.seeBtn.addEventListener("click", game.updateSeeMode);
-      game.resetBtn.addEventListener("click", function () {
-        if (confirm('Changer de mots ?\nLe tour en cours sera réinitialisé')) game.restartGame();
-      });
+      game.resetBtn.addEventListener("click", game.restartbtn);
     }
-  }; // game.init()
+  };
 });
 },{}],"../../../../../AppData/Roaming/npm/node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
@@ -620,7 +729,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "62954" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "63096" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};

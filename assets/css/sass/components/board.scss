@@ -1,29 +1,66 @@
+.board-wrapper {
+	position: fixed;
+	display: flex;
+	flex-direction: column;
+	top: 0;
+	bottom: 0;
+	left: 0;
+	right: 0;
+	transform: translateX(-100%);
+	&:before {
+		content: "";
+		position: absolute;
+		background: url("../img/background.jpg");
+		background-size: cover;
+		z-index: -1; /* Keep the background behind the content */
+		height: 20%;
+		width: 20%; /* Using Glen Maddern's trick /via @mente */
+
+		/* don't forget to use the prefixes you need */
+		transform: scale(5);
+		transform-origin: top left;
+		filter: blur(0.8px);
+	}
+}
+.board-wrapper.watching {
+	&::before {
+		filter: blur(0.8px) brightness(0.5);
+	}
+}
+body.startgame {
+	.board-wrapper {
+		transform: translateX(0);
+	}
+}
 .board {
 	display: flex;
 	width: 100%;
-	justify-content: space-evenly;
 	flex-wrap: wrap;
-	padding: 0 20px;
-	height: 100%;
+	padding: 80px 0;
+	height: auto;
+	justify-content: center;
+	overflow-y: auto;
 	&-card {
 		display: flex;
 		flex-direction: column;
 		width: 100px;
-		max-height: 150px;
-		background: #410000;
-		border: 1px solid;
+		height: 130px;
+		margin: 5px;
+		border-radius: 6px;
 	}
 	&-card.active {
-		background: red;
+		background: $yellow-primary;
+		background: linear-gradient(45deg, $yellow-primary 0%, $orange-primary 100%);
+		-webkit-box-shadow: 10px 10px 8px -10px rgba(0, 0, 0, 0.75);
+		-moz-box-shadow: 10px 10px 8px -10px rgba(0, 0, 0, 0.75);
+		box-shadow: 10px 10px 8px -10px rgba(0, 0, 0, 0.75);
 	}
 	&-card.player.eliminated {
 		.content {
-			background: black;
+			background: $black-primary;
 		}
-	}
-	&-card.player.watching {
-		.content {
-			background: blue;
+		.name {
+			opacity: 0.5;
 		}
 	}
 
@@ -36,18 +73,19 @@
 		.content {
 			display: flex;
 			@extend %centerFlex;
-			background: #410000;
+			background: #c200fb;
 			border-radius: 50%;
-			height: 100px;
-			width: 100px;
+			height: 96px;
+			width: 96px;
 		}
 		.name {
 			background: #c0c0c094;
+			color: $black-primary;
 			width: 100%;
 			display: flex;
 			margin-top: 6px;
 			padding: 5px 10px;
-			border-radius: 99999999px;
+			border-radius: 6px;
 			@extend %centerFlex;
 		}
 	}

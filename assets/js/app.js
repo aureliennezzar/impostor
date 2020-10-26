@@ -1,20 +1,113 @@
 document.addEventListener('DOMContentLoaded', function () {
 	var app = {
+		boardWrapper: document.querySelector('.board-wrapper'),
 		slider: document.querySelector('.playerSlider'),
 		sliderLabel: document.querySelector('.slider-label'),
 		civiliansDisplay: document.querySelector('.game-infos-civil'),
 		impostorDisplay: document.querySelector('.game-infos-impostor .game-infos-text'),
 		mrWhiteDisplay: document.querySelector('.game-infos-mrwhite .game-infos-text'),
+		//Minus Add btns
+		addImpostor: document.querySelector('.game-infos-impostor .add'),
+		minusImpostor: document.querySelector('.game-infos-impostor .minus'),
+		addWhite: document.querySelector('.game-infos-mrwhite .add'),
+		minusWhite: document.querySelector('.game-infos-mrwhite .minus'),
+		buttons: document.querySelectorAll('.game-infos-item button'),
+		addButtons: document.querySelectorAll('.game-infos-item button.add'),
+		minusButtons: document.querySelectorAll('.game-infos-item button.minus'),
+
+		startBtn: document.querySelector('.btn-start'),
 		nbPlayers: 5,
 		nbImpostor: 1,
 		nbWhite: 1,
 		nbInfiltrators: 2,
-		nbCivilians: 3,
-		updateInfos:function(){
+		nbCitizens: 3,
+		maxImpostors: 2,
+		maxInfiltrators: 2,
+
+		init: function () {
+			console.log(`%c
+    _   _            _____                          _                
+   | | | |          |_   _|                        | |               
+   | |_| |__   ___    | | _ __ ___  _ __   ___  ___| |_ ___  _ __    
+   | __| '_ \\ / _ \\   | || '_ \` _ \\| '_ \\ / _ \\/ __| __/ _ \\| '__|   
+   | |_| | | |  __/  _| || | | | | | |_) | (_) \\__ \\ || (_) | |      
+    \\__|_| |_|\\___|  \\___/_| |_| |_| .__/ \\___/|___/\\__\\___/|_|      
+   								   | |                               
+								   |_|                               
+									                                 `, "background:#1D7D8F;color:#fff;");
+			console.log("%cCreated by Aurélien Tallet & Aurélien NEZZAR.", "color:red;")
+
+			app.handleSlider();
+			app.handleBtns();
+		},
+		startGame: function () {
+			document.body.classList.add('startgame')
+			game.nbPlayers = app.nbPlayers
+			game.nbImpostor = app.nbImpostor
+			game.nbWhite = app.nbWhite
+			game.nbInfiltrators = app.nbInfiltrators
+			game.nbCitizens = app.nbCitizens
+			game.init()
+		},
+		handleBtns: function () {
+			//Start btn
+			app.startBtn.addEventListener('click', app.startGame)
+			//ADD
+			app.addImpostor.addEventListener('click', function () {
+				app.addRole(0)
+			})
+			app.addWhite.addEventListener('click', function () {
+				app.addRole(1)
+			})
+			//MINUS
+			app.minusImpostor.addEventListener('click', function () {
+				app.minusRole(0)
+			})
+			app.minusWhite.addEventListener('click', function () {
+				app.minusRole(1)
+			})
+		},
+		addRole: function (type) {
+			type
+				? app.nbWhite++
+				: app.nbImpostor++
+			app.nbInfiltrators++
+			app.nbCitizens--
+			app.updateInfos()
+		},
+		minusRole: function (type) {
+			type
+				? app.nbWhite--
+				: app.nbImpostor--
+			app.nbInfiltrators--
+			app.nbCitizens++
+			app.updateInfos()
+
+		},
+		updateInfos: function () {
 			app.sliderLabel.innerHTML = 'Joueurs : ' + app.nbPlayers
-			app.civiliansDisplay.innerHTML = app.nbCivilians + ' Civils'
+			app.civiliansDisplay.innerHTML = app.nbCitizens + ' Civils'
 			app.impostorDisplay.innerHTML = app.nbImpostor + ' Imposteurs'
 			app.mrWhiteDisplay.innerHTML = app.nbWhite + ' Mr.White'
+			//RESET BTNS
+			for (btn of app.buttons) {
+				btn.style.display = "block"
+			}
+
+			//CONDITIONS
+			if (app.nbInfiltrators === app.maxInfiltrators) {
+				for (btn of app.addButtons) {
+					btn.style.display = "none"
+				}
+			}
+			if (app.nbInfiltrators === 1) {
+				for (btn of app.minusButtons) {
+					btn.style.display = "none"
+				}
+			}
+			if (app.nbImpostor === app.maxImpostors) app.addImpostor.style.display = "none";
+			if (!app.nbImpostor) app.minusImpostor.style.display = "none";
+			if (!app.nbWhite) app.minusWhite.style.display = "none";
 		},
 		handleSlider: function () {
 			app.updateInfos()
@@ -22,32 +115,28 @@ document.addEventListener('DOMContentLoaded', function () {
 				app.nbPlayers = this.value
 				app.nbImpostor = 0
 				app.nbWhite = 0
-				let maxImpostors = 0
-				let maxInfiltrators = Math.floor(app.nbPlayers / 2)
+				app.maxImpostors = 0
+				app.maxInfiltrators = Math.floor(app.nbPlayers / 2)
 				this.value % 2 === 0
-					? maxImpostors += maxInfiltrators - 1
-					: maxImpostors += maxInfiltrators
+					? app.maxImpostors += app.maxInfiltrators - 1
+					: app.maxImpostors += app.maxInfiltrators
 				let increaseInterval = 2
 
 				let wCount = 0;
-					iCount = 0;
+				iCount = 0;
 				for (let i = 4; i <= 20; i += 2) {
 					!increaseInterval ? wCount++ : iCount++
 					if (app.nbPlayers >= i - 1 && app.nbPlayers <= i) {
 						app.nbWhite = wCount;
 						app.nbImpostor = iCount;
-						console.log(wCount);
 						app.nbInfiltrators = iCount + wCount
-						app.nbCivilians = app.nbPlayers - app.nbInfiltrators
+						app.nbCitizens = app.nbPlayers - app.nbInfiltrators
 					};
 					increaseInterval++
 					if (increaseInterval > 2) increaseInterval = 0
 				}
 				app.updateInfos()
 			})
-		},
-		init: function () {
-			app.handleSlider();
 		},
 	}
 	app.init()
@@ -68,6 +157,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
 		//Elements init
 		board: document.querySelector('.board'),
+		boardWrapper: document.querySelector('.board-wrapper'),
 		modal: document.querySelector('.modal'),
 		modalForm: document.querySelector('.modal-content-form'),
 		modalInfos: document.querySelector('.modal-content-infos'),
@@ -78,6 +168,7 @@ document.addEventListener('DOMContentLoaded', function () {
 		formInput: document.querySelector('.form-input'),
 		seeBtn: document.querySelector('.footer-see'),
 		resetBtn: document.querySelector('.footer-reset'),
+		leaveBtn: document.querySelector('.header-leave'),
 
 
 		//Variables init
@@ -86,12 +177,12 @@ document.addEventListener('DOMContentLoaded', function () {
 		newPlayers: true,
 		seeCard: false,
 		overlayActive: true,
-		nbPlayers: 3,
-		nbImpostor: 1,
-		nbWhite: 0,
-		nbInfiltrators: 1 + 0,
-		nbCitizens: 3 - (1 + 0),
 		activePlayer: 0,
+		nbPlayers: app.nbPlayers,
+		nbImpostor: app.nbImpostor,
+		nbWhite: app.nbWhite,
+		nbInfiltrators: app.nbInfiltrators,
+		nbCitizens: app.nbCitizens,
 		playerList: [],
 		cardList: [],
 
@@ -107,7 +198,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
 		handleModal: function (e) {
 			e.preventDefault()
-			if (e.target === game.modal && game.overlayActive & !game.playerChosing) {
+			if (e.target === game.modal && game.overlayActive && !game.playerChosing) {
 				//PLAYER CLICK OVERLAY
 				game.activePlayer--;
 				game.formInput.value = "";
@@ -134,12 +225,8 @@ document.addEventListener('DOMContentLoaded', function () {
 			game.modalInfos.style.display = "flex"
 			game.modalForm.style.display = "none"
 
-			if (game.inGame) {
+			if (game.inGame || (!game.newPlayers && !game.playerChosing)) {
 				//If all players already chose a card, display directly main & title
-				game.modalTitle.innerHTML = title;
-				game.modalRole.innerHTML = main;
-			} else if (!game.newPlayers && !game.playerChosing) {
-				//Else if its a new game with same players and nobdy is chosing a card, display directly main & title
 				game.modalTitle.innerHTML = title;
 				game.modalRole.innerHTML = main;
 			} else {
@@ -279,7 +366,24 @@ document.addEventListener('DOMContentLoaded', function () {
 			game.showModal();
 		},
 
+		leaveGame: function () {
+			if (confirm('Quitter la partie ?')) {
+				game.playerList = []
+				game.cardList = []
+				game.newPlayers = true
+				game.playerChosing = false
+				game.inGame = false
+				game.newPlayers = true
+				game.seeCard = false
+				game.overlayActive = true
+				game.activePlayer = 0
+				game.board.innerHTML = "";
+				document.body.classList.remove('startgame')
+			}
+		},
+
 		restartGame: function () {
+			game.seeBtn.style.display = "none"
 			game.cardList = [];
 			game.board.innerHTML = "";
 			game.generateCards();
@@ -296,6 +400,11 @@ document.addEventListener('DOMContentLoaded', function () {
 				game.playerList = []
 			}
 			game.inGame = false;
+		},
+
+
+		restartbtn: function (force = 0) {
+			if (confirm('Changer de mots ?\nLe tour en cours sera réinitialisé')) game.restartGame()
 		},
 
 		kickPlayer: function (el) {
@@ -347,27 +456,23 @@ document.addEventListener('DOMContentLoaded', function () {
 			for (card of cards) {
 				card.removeEventListener('click', game.cardClick)
 			}
+
+			game.leaveBtn.removeEventListener("click", game.leaveGame)
+			game.resetBtn.removeEventListener("click", game.restartbtn)
 		},
 		updateSeeMode: function () {
-			const activeCards = document.querySelectorAll('.board-card:not(.eliminated)')
 			game.seeCard = !game.seeCard
 			if (game.seeCard) {
-				for (card of activeCards) {
-					card.classList.add('watching')
-				}
+				game.boardWrapper.classList.add('watching')
 			} else {
-				for (card of activeCards) {
-					card.classList.remove('watching')
-				}
+				game.boardWrapper.classList.remove('watching')
+
 			}
 		},
 		handleBtns: function () {
+			game.leaveBtn.addEventListener("click", game.leaveGame)
 			game.seeBtn.addEventListener("click", game.updateSeeMode)
-			game.resetBtn.addEventListener("click", function () {
-				if (confirm('Changer de mots ?\nLe tour en cours sera réinitialisé')) game.restartGame()
-
-			})
+			game.resetBtn.addEventListener("click", game.restartbtn)
 		},
 	}
-	// game.init()
 })

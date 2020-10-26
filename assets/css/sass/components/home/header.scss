@@ -1,4 +1,15 @@
 .home-header{
+	display: flex;
 	text-align: center;
-	padding: 10px 0;
+	padding: 100px 0 0 0 ;
+	justify-content: center;
+	opacity: .9;
+	h1{
+		font-size: 60px;
+		color: $black-primary;
+	}
+	p{
+		align-self: flex-end;
+		padding: 0 10px 22px 10px;
+	}
 }

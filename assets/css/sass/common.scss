@@ -1,14 +1,36 @@
 //placeholders
-%center{
+%center {
 	top: 50%;
 	left: 50%;
 	transform: translateX(-50%) translateY(-50%);
 }
-%centerFlex{
+%centerFlex {
 	align-items: center;
 	justify-content: center;
 }
-%flexCol{
+%flexCol {
 	display: flex;
 	flex-direction: column;
+}
+
+.a-book {
+	font-family: "AvenirBook";
+}
+.a-regular {
+	font-family: "Avenir";
+}
+$black-primary: #2e2e3a;
+$blue-primary: #6699cc;
+$blue-primary-light: #d8ecff;
+$orange-primary: #ffa20b;
+$yellow-primary: #ffe00b;
+
+.bg-white {
+	background: #fff;
+}
+.bg-black {
+	background: $black-primary;
+}
+.bg-blue {
+	background: $blue-primary;
 }

@@ -10,7 +10,7 @@
 
 <body class="home-body">
 	<header class="home-header">
-		<h1>Impostor</h1>
+		<p>the</p><h1>Impostor</h1><p>v0.1</p>
 	</header>
 	<main class="home-main">
 		<div class="slider-wrapper">
@@ -20,20 +20,50 @@
 		<div class="game-infos">
 			<p class="game-infos-civil game-infos-text game-infos-item">Civils</p>
 			<div class="game-infos-impostor game-infos-item">
-				<button class="btn btn-infos black">-</button>
+				<button class="btn btn-infos black minus">-</button>
 				<p class="game-infos-text black">Impostors</p>
-				<button class="btn btn-infos black">+</button>
+				<button class="btn btn-infos black add">+</button>
 			</div>
 			<div class="game-infos-mrwhite game-infos-item">
-				<button class="btn btn-infos white">-</button>
+				<button class="btn btn-infos white minus">-</button>
 				<p class="game-infos-text white">Mr.White</p>
-				<button class="btn btn-infos white">+</button>
+				<button class="btn btn-infos white add">+</button>
 			</div>
 		</div>
+
+
+		<section class="board-wrapper">
+			<aside class="modal">
+				<div class="modal-content">
+					<h3 class="modal-title"></h3>
+					<form class="modal-content-form" onsubmit="game.test">
+						<label for="username">Choisis ton nom</label>
+						<input class="form-input" type="text" name="username" placeholder="Écrire ici">
+						<button type="submit" class="btn btn-secondary form-btn">choisir mot</button>
+					</form>
+					<div class="modal-content-infos">
+						<p class="modal-role"></p>
+						<button class="btn btn-secondary modal-btn">continuer</button>
+					</div>
+				</div>
+			</aside>
+			<header class="header">
+				<button class="header-leave btn btn-primary">quitter</button>
+			</header>
+			<main class="board">
+
+			</main>
+			<footer class="footer">
+				<button class="footer-reset btn btn-primary">restart</button>
+				<button class="footer-see btn btn-primary">voir carte</button>
+			</footer>
+		</section>
+
 	</main>
 	<footer class="home-footer">
-		<button>Commencer</button>
+		<button class="btn btn-secondary btn-start">Commencer</button>
 	</footer>
+
 
 	<script src="/app.56908c73.js"></script>
 </body>

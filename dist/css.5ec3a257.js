@@ -189,7 +189,7 @@ var reloadCSS = require('_css_loader');
 
 module.hot.dispose(reloadCSS);
 module.hot.accept(reloadCSS);
-},{"./..\\img\\background.jpg":[["background.faf9db70.jpg","assets/img/background.jpg"],"assets/img/background.jpg"],"_css_loader":"../../../../../AppData/Roaming/npm/node_modules/parcel-bundler/src/builtins/css-loader.js"}],"../../../../../AppData/Roaming/npm/node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
+},{"./..\\fonts\\Avenir-Medium.eot":[["Avenir-Medium.fb5c03a1.eot","assets/fonts/Avenir-Medium.eot"],"assets/fonts/Avenir-Medium.eot"],"./..\\fonts\\Avenir-Medium.woff2":[["Avenir-Medium.3fd1ab9e.woff2","assets/fonts/Avenir-Medium.woff2"],"assets/fonts/Avenir-Medium.woff2"],"./..\\fonts\\Avenir-Medium.woff":[["Avenir-Medium.fc531c3c.woff","assets/fonts/Avenir-Medium.woff"],"assets/fonts/Avenir-Medium.woff"],"./..\\fonts\\Avenir-Medium.ttf":[["Avenir-Medium.eea3cc92.ttf","assets/fonts/Avenir-Medium.ttf"],"assets/fonts/Avenir-Medium.ttf"],"./..\\fonts\\Avenir-Medium.svg":[["Avenir-Medium.e3401691.svg","assets/fonts/Avenir-Medium.svg"],"assets/fonts/Avenir-Medium.svg"],"./..\\fonts\\AvenirBook.eot":[["AvenirBook.9ce38fa2.eot","assets/fonts/AvenirBook.eot"],"assets/fonts/AvenirBook.eot"],"./..\\fonts\\AvenirBook.woff2":[["AvenirBook.014281bc.woff2","assets/fonts/AvenirBook.woff2"],"assets/fonts/AvenirBook.woff2"],"./..\\fonts\\AvenirBook.woff":[["AvenirBook.d5f00aab.woff","assets/fonts/AvenirBook.woff"],"assets/fonts/AvenirBook.woff"],"./..\\fonts\\AvenirBook.ttf":[["AvenirBook.3b7d12e3.ttf","assets/fonts/AvenirBook.ttf"],"assets/fonts/AvenirBook.ttf"],"./..\\fonts\\AvenirBook.svg":[["AvenirBook.5ed09708.svg","assets/fonts/AvenirBook.svg"],"assets/fonts/AvenirBook.svg"],"./..\\img\\background.jpg":[["background.faf9db70.jpg","assets/img/background.jpg"],"assets/img/background.jpg"],"_css_loader":"../../../../../AppData/Roaming/npm/node_modules/parcel-bundler/src/builtins/css-loader.js"}],"../../../../../AppData/Roaming/npm/node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
 var OVERLAY_ID = '__parcel__error__overlay__';
 var OldModule = module.bundle.Module;
@@ -217,7 +217,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "62954" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "63096" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};
